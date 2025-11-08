@@ -1,6 +1,6 @@
-from google import generativeai as genai
-import streamlit as st
-from dotenv import load_dotenv
+from google import generativeai as genai #imported genai
+import streamlit as st  
+from dotenv import load_dotenv  # to store the gemini key
 from PyPDF2 import PdfReader
 from docx import Document
 import os
@@ -11,9 +11,9 @@ gemini_api_key = os.getenv('GEMINI_API_KEY') # giving the apikey stored in .env 
 
 genai.configure(api_key = gemini_api_key)
 
-model = genai.GenerativeModel('gemini-2.0-flash')
+model = genai.GenerativeModel('gemini-2.0-flash')  #selecting a gemini model
 
-# fun to extract from pdf
+# function to extract from pdf
 def extract_text_from_pdf(upload):
     reader = PdfReader(upload)
     text = ""
@@ -28,6 +28,7 @@ def extract_text_from_docx(upload):
     for para in doc.paragraphs:
         text += para.text + "\n"
     return text
+    
 st.set_page_config(page_title="AI Resume Reviewer", page_icon="💼", layout="centered")
 import streamlit as st
 
@@ -64,6 +65,8 @@ st.markdown("""
 st.title('AI RESUME REVIEWER')
 st.write('By Trishita')
 st.write('Upload your Resume in PDF or DOCx format')
+
+
 upload = st.file_uploader('Upload your file', type = ['pdf','docx'])
 if upload is not None:
     if upload.type == 'application/pdf':
@@ -90,3 +93,4 @@ if upload is not None:
         response = model.generate_content(prompt)
         st.header('Resume Analysis')
         st.markdown(response.text)
+
